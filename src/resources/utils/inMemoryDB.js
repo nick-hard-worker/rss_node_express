@@ -4,32 +4,31 @@ const db = {
   Users: [new User(), new User(), new User()]
 };
 
-const getAll = async entity => {
-  return db[entity];
+const getAll = async entityName => {
+  return db[entityName];
 };
 
-const getById = async (entity, id) => {
-  return db[entity].find(el => el.id === id);
+const getById = async (entityName, id) => {
+  return db[entityName].find(el => el.id === id);
 };
 
-const create = async (entity, user) => {
-  const newEntity = new User(user);
-  db[entity].push(newEntity);
+const save = async (entityName, newEntity) => {
+  db[entityName].push(newEntity);
   return newEntity;
 };
 
-const update = async (entity, id, user) => {
-  const index = db[entity].findIndex(el => el.id === id);
+const update = async (entityName, id, user) => {
+  const index = db[entityName].findIndex(el => el.id === id);
 
-  if (index) return (db[entity][index] = { ...user });
+  if (index) return (db[entityName][index] = { ...user });
 };
 
-const del = async (entity, id) => {
-  const index = db[entity].findIndex(el => el.id === id);
+const del = async (entityName, id) => {
+  const index = db[entityName].findIndex(el => el.id === id);
   if (index) {
-    db[entity].splice(index, 1);
+    db[entityName].splice(index, 1);
     return true;
   }
 };
 
-module.exports = { getAll, getById, create, update, del };
+module.exports = { getAll, getById, save, update, del };
