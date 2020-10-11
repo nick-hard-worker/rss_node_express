@@ -1,38 +1,25 @@
-const User = require('./user.model');
-const DB = require('../utils/inMemoryDB');
-const users = DB.users;
+// const User = require('./user.model');
+const entity = 'Users';
+const db = require('../utils/inMemoryDB');
 
 const getAll = async () => {
-  // TODO: mock implementation. should be replaced during task development
-  return users;
+  return db.getAll(entity);
 };
 
 const getById = async id => {
-  return users.find(el => el.id === id);
+  return db.getById(entity, id);
 };
 
 const create = async user => {
-  const newUser = new User(user);
-  users.push(newUser);
-  return newUser;
+  return db.create(entity, user);
 };
 
 const update = async (id, user) => {
-  const index = users.findIndex(el => el.id === id);
-
-  if (index) {
-    users[index].name = user.name;
-    users[index].login = user.login;
-    users[index].password = user.password;
-  }
-
-  return users[index];
+  return db.update(entity, id, user);
 };
 
 const del = async id => {
-  const index = users.findIndex(el => el.id === id);
-  users.splice(index, 1);
-  return true;
+  return db.del(entity, id);
 };
 
 module.exports = { getAll, create, getById, update, del };
