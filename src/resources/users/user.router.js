@@ -11,7 +11,8 @@ router.route('/').get(async (req, res) => {
 router.route('/:id').get(async (req, res) => {
   const user = await usersService.getById(req.params.id);
 
-  res.json(User.toResponse(user));
+  if (user) res.json(User.toResponse(user));
+  else res.status(404).send('Not found.');
 });
 
 router.route('/').post(async (req, res) => {
@@ -31,7 +32,6 @@ router.route('/:id').delete(async (req, res) => {
 
   if (isDeleted) res.status(204).send();
   else res.status(404).send('Not found.');
-  console.log(res.statusCode);
 });
 
 module.exports = router;

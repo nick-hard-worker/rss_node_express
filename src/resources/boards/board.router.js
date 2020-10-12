@@ -10,7 +10,8 @@ router.route('/').get(async (req, res) => {
 router.route('/:idBoard').get(async (req, res) => {
   const board = await boardsService.getById(req.params.idBoard);
 
-  res.json(board);
+  if (board) res.json(board);
+  else res.status(404).send('Not found.');
 });
 
 router.route('/').post(async (req, res) => {

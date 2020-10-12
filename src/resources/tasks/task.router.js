@@ -10,7 +10,8 @@ router.route('/').get(async (req, res) => {
 router.route('/:idTask').get(async (req, res) => {
   const task = await tasksService.getById(req.params.idTask);
 
-  res.json(task);
+  if (task) res.json(task);
+  else res.status(404).send('Not found.');
 });
 
 router.route('/').post(async (req, res) => {
@@ -29,10 +30,9 @@ router.route('/:idTask').put(async (req, res) => {
 router.route('/:idTask').delete(async (req, res) => {
   const idBoard = req.params.idBoard;
   const isDeleted = await tasksService.del(idBoard, req.params.idTask);
-  console.log(isDeleted);
+
   if (isDeleted) res.status(204).send();
   else res.status(404).send('Not found.');
-  console.log(res.statusCode);
 });
 
 module.exports = router;

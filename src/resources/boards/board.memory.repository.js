@@ -20,9 +20,7 @@ const update = async (id, board) => {
 };
 
 const del = async id => {
-  const temp = await db.del(entityName, id);
-  console.log(temp);
-  return temp;
+  return await db.del(entityName, id);
 };
 
 module.exports = { getAll, create, getById, update, del };

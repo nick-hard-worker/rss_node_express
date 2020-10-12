@@ -51,7 +51,6 @@ const del = async (entityName, id) => {
   }
 
   const index = db[entityName].findIndex(el => el.id === id);
-  // console.log(index);
   if (index !== -1) {
     db[entityName].splice(index, 1);
     return true;
