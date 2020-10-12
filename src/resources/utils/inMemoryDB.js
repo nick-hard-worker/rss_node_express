@@ -1,11 +1,25 @@
 const User = require('../users/user.model');
+const Board = require('../boards/board.model');
+const Task = require('../tasks/task.model');
 
 const db = {
-  Users: [new User(), new User(), new User()]
+  Users: [new User(), new User(), new User()],
+  Boards: [new Board(), new Board()]
 };
 
-const getAll = async entityName => {
-  return db[entityName];
+db.Tasks = [
+  new Task({ boardId: db.Boards[0].id }),
+  new Task({ boardId: db.Boards[0].id }),
+  new Task({ boardId: db.Boards[1].id }),
+  new Task({ boardId: db.Boards[1].id })
+];
+
+const getAll = async (entityName, idBoard) => {
+  if (entityName === 'Tasks') {
+    return db[entityName].filter(el => el.boardId === idBoard);
+  }
+
+  return db[entityName]; // return Users and Boards
 };
 
 const getById = async (entityName, id) => {
@@ -20,12 +34,25 @@ const save = async (entityName, newEntity) => {
 const update = async (entityName, id, user) => {
   const index = db[entityName].findIndex(el => el.id === id);
 
-  if (index) return (db[entityName][index] = { ...user });
+  if (index !== undefined) return (db[entityName][index] = { ...user });
 };
 
 const del = async (entityName, id) => {
+  if (entityName === 'Boards') {
+    // remove all tasks of this board
+    db.Tasks = db.Tasks.filter(el => el.boardId !== id);
+  }
+
+  if (entityName === 'Users') {
+    // unassign user's tasks
+    db.Tasks.map(el => {
+      if (el.userId === id) el.userId = null;
+    });
+  }
+
   const index = db[entityName].findIndex(el => el.id === id);
-  if (index) {
+  // console.log(index);
+  if (index !== -1) {
     db[entityName].splice(index, 1);
     return true;
   }
